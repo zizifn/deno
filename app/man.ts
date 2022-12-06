@@ -7,9 +7,14 @@ io.on("connection", (socket) => {
   console.log(`socket ${socket.id} connected`);
 
   socket.emit("hello", "world");
-  socket.on("echo", (...msg) => {
-    console.log(msg);
-    socket.emit("echo", `server echo to ${msg}`);
+  socket.on("echo", (arg1, callback) => {
+    console.log(arg1);
+    socket.emit("echo", `server echo to ${arg1}`);
+    if (typeof callback === "function") {
+      callback({
+        status: `ok, got ${arg1}`,
+      });
+    }
   });
 
   socket.on("disconnect", (reason) => {
